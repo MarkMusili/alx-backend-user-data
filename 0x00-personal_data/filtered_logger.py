@@ -7,7 +7,7 @@ import logging
 import re
 import os
 import mysql.connector
-from typing import List
+from typing import List, mysql.connector.connection.MySQLConnection
 
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -57,7 +57,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db():
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """
     Return an instance of mysql-connector connection
     """
