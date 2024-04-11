@@ -5,6 +5,8 @@ Filtering log information
 
 import logging
 import re
+import os
+import mysql.connector
 from typing import List
 
 
@@ -53,3 +55,16 @@ def get_logger() -> logging.Logger:
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def get_db():
+    """
+    Return an instance of mysql-connector connection
+    """
+    connector = mysql.connector.connect(
+        host = os.getenv('PERSONAL_DATA_DB_HOST', 'root'),
+        user = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
+        password = os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
+        database = os.getenv('PERSONAL_DATA_DB_NAME')
+    )
+    return connector
