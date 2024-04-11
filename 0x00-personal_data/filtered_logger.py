@@ -7,7 +7,7 @@ import logging
 import re
 import os
 import mysql.connector
-from typing import List, mysql.connector.connection.MySQLConnection
+from typing import List
 
 
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'password')
@@ -62,9 +62,26 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     Return an instance of mysql-connector connection
     """
     connector = mysql.connector.connect(
-        host = os.getenv('PERSONAL_DATA_DB_HOST', 'root'),
+        host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
         user = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
         password = os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
         database = os.getenv('PERSONAL_DATA_DB_NAME')
     )
     return connector
+
+
+def main():
+    """
+    Main function
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+    for row in cursor:
+        message = ""
+        for i in range(len(row)):
+            message += f"{PII_FIELDS[i]}={row[i]};"
+        logger.info(message)
+    cursor.close()
+    db.close()
