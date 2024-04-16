@@ -55,7 +55,7 @@ class BasicAuth (Auth):
         if ':' not in decoded_base64_authorization_header:
             return None, None
 
-        creditials = decoded_base64_authorization_header.split(':')
+        creditials = decoded_base64_authorization_header.split(':', 1)
         return creditials[0], creditials[1]
 
     def user_object_from_credentials(self,
