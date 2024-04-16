@@ -12,17 +12,20 @@ class Auth:
     """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
-        Make sure path is not in exculded_paths
+        Make sure path is not in excluded_paths
         """
-        if path is None or \
-                excluded_paths is None or excluded_paths == []:
+        if path is None or excluded_paths is None or excluded_paths == []:
             return True
 
         if not path.endswith('/'):
             path += '/'
 
-        if path in excluded_paths:
-            return False
+        for excluded_path in excluded_paths:
+            if excluded_path.endswith('*'):
+                if path.startswith(excluded_path[:-1]):
+                    return False
+            elif path == excluded_path:
+                return False
 
         return True
 
