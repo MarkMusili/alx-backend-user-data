@@ -23,6 +23,7 @@ elif auth_type == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
 
+
 @app.before_request
 def before_request_func() -> None:
     """
@@ -49,12 +50,14 @@ def not_found(error) -> str:
     """
     return jsonify({"error": "Not found"}), 404
 
+
 @app.errorhandler(401)
 def unauthorized(error) -> str:
     """
     Unauthorized access error
     """
     return jsonify({"error": "Unauthorized"}), 401
+
 
 @app.errorhandler(403)
 def forbidden(error) -> str:
