@@ -7,6 +7,9 @@ from typing import TypeVar, List
 
 
 class Auth:
+    """
+    Auth base class for authentication
+    """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """
         Make sure path is not in exculded_paths
