@@ -3,6 +3,7 @@
 Authentication class to manage API
 """
 from flask import request
+from os import getenv
 from typing import TypeVar, List
 
 
@@ -43,3 +44,11 @@ class Auth:
         Get the current user based on a request
         """
         return None
+
+    def session_cookie(self, request=None):
+        """
+        Return a coockie value from a request
+        """
+        if request is None:
+            return None
+        return request.cookies.get(getenv('SESSION_NAME'))
