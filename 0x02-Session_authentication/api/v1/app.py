@@ -41,16 +41,16 @@ def before_request_func() -> None:
     if not auth.require_auth(request.path, excluded_paths):
         return
 
+    if auth.authorization_header(request) is None \
+            and isinstance(auth, BasicAuth):
+        abort(401)
+
     request.current_user = auth.current_user(request)
     if auth.current_user(request) is None:
         abort(403)
 
     if auth.session_cookie(request) is None \
             and isinstance(auth, SessionAuth):
-        abort(401)
-
-    if not auth.authorization_header(request) \
-            and isinstance(auth, BasicAuth):
         abort(401)
 
 
