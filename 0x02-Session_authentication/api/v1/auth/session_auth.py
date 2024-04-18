@@ -6,6 +6,7 @@ from .auth import Auth
 from models.user import User
 from uuid import uuid4
 
+
 class SessionAuth(Auth):
     """
     Class implimentation for session authentication
