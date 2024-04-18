@@ -46,11 +46,11 @@ def before_request_func() -> None:
         abort(403)
 
     if auth.session_cookie(request) is None \
-        and isinstance(auth, SessionAuth):
+            and isinstance(auth, SessionAuth):
         abort(401)
 
     if not auth.authorization_header(request) \
-        and isinstance(auth, BasicAuth):
+            and isinstance(auth, BasicAuth):
         abort(401)
 
 
