@@ -34,7 +34,9 @@ def login_session():
         response.set_cookie(getenv('SESSION_NAME'), session_id)
         return response
 
-@app_views.route('/api/v1/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+
+@app_views.route('/api/v1/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
 def logout():
     if auth.destroy_session(request) is False:
         abort(404)
