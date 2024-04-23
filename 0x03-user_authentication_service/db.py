@@ -36,9 +36,13 @@ class DB:
         Save the user to the database
         Return a User object
         """
-        new_user = User(email=email, hashed_password=hashed_password)
-        self._session.add(new_user)
-        self._session.commit()
+        try:
+            new_user = User(email=email, hashed_password=hashed_password)
+            self._session.add(new_user)
+            self._session.commit()
+        except Exception:
+            self._session.rollback()
+            new_user = None
         return new_user
 
     def find_user_by(self, **kwagrs):
@@ -53,4 +57,3 @@ class DB:
             return self._session.query(User).filter_by(**kwagrs).one()
         except NoResultFound:
             raise
-
