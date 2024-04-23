@@ -53,3 +53,4 @@ class DB:
             return self._session.query(User).filter_by(**kwagrs).one()
         except NoResultFound:
             raise
+
