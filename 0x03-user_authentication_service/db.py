@@ -51,9 +51,9 @@ class DB:
         """
         valid_args = ['id', 'email', 'hashed_password',
                       'session_id', 'reset_token']
-        if not any(arg in valid_args for arg in kwagrs):
+        if not kwagrs or any(arg not in valid_args for arg in kwagrs):
             raise InvalidRequestError()
         try:
             return self._session.query(User).filter_by(**kwagrs).one()
-        except NoResultFound():
-            raise
+        except Exception:
+            raise NoResultFound()
