@@ -45,9 +45,11 @@ class DB:
         """
         Find a user in the database
         """
+        valid_args = ['id', 'email', 'hashed_password',
+                      'session_id', 'reset_token']
+        if not any(arg in valid_args for arg in kwagrs):
+            raise InvalidRequestError
         try:
             return self._session.query(User).filter_by(**kwagrs).one()
         except NoResultFound:
-            raise
-        except InvalidRequestError:
             raise
