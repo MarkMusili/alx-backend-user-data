@@ -34,17 +34,20 @@ def users():
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """
-    Login route
+    """ POST /sessions
+      Return:
+        - message
     """
     email = request.form.get('email')
     password = request.form.get('password')
-    if not auth.valid_login(email, password):
+    valid_login = auth.valid_login(email, password)
+    if valid_login:
+        session_id = auth.create_session(email)
+        response = jsonify({"email": f"{email}", "message": "logged in"})
+        response.set_cookie('session_id', session_id)
+        return response
+    else:
         abort(401)
-    session_id = auth.create_session(email)
-    response = jsonify({"email": email, "message": "logged in"})
-    response.set_cookie("session_id", session_id)
-    return response
 
 
 if __name__ == "__main__":
