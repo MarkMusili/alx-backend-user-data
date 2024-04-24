@@ -35,7 +35,9 @@ def users():
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
     """
-    Login function
+    Login route
+    Recieves a form and validate a user
+    return the response with a set cookie
     """
     email = request.form.get('email')
     password = request.form.get('password')
