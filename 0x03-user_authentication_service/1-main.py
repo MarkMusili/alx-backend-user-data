@@ -13,6 +13,3 @@ print(user_1.id)
 
 user_2 = my_db.add_user("test1@test.com", "SuperHashedPwd1")
 print(user_2.id)
-
-user_3 = my_db.add_user("test1@test.com", None)
-print(user_3)
