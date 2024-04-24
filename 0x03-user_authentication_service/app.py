@@ -7,18 +7,18 @@ from auth import Auth
 
 
 app = Flask(__name__)
-auth = Auth()
+AUTH = Auth()
 
 
-@app.route('/', strict_slashes=False)
+@app.route('/')
 def root():
     """
     Root path
     """
-    return jsonify({"message": "Bienvenue"}), 200
+    return jsonify({"message": "Bienvenue"})
 
 
-@app.route('/users', methods=['POST'], strict_slashes=False)
+@app.route('/users', methods=['POST'])
 def users():
     """
     Endpoint for users
@@ -26,28 +26,25 @@ def users():
     email = request.form.get('email')
     password = request.form.get('password')
     try:
-        user = auth.register_user(email, password)
-        return jsonify({"email": user.email, "message": "user created"}), 200
+        user = AUTH.register_user(email, password)
+        return jsonify({"email": user.email, "message": "user created"})
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """ POST /sessions
-      Return:
-        - message
+    """
+    Login route
     """
     email = request.form.get('email')
     password = request.form.get('password')
-    valid_login = auth.valid_login(email, password)
-    if valid_login:
-        session_id = auth.create_session(email)
-        response = jsonify({"email": f"{email}", "message": "logged in"})
-        response.set_cookie('session_id', session_id)
-        return response
-    else:
+    if not AUTH.valid_login(email, password):
         abort(401)
+    session_id = AUTH.create_session(email)
+    response = jsonify({"email": email, "message": "logged in"})
+    response.set_cookie("session_id", session_id)
+    return response
 
 
 if __name__ == "__main__":
