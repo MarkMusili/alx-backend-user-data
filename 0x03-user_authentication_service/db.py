@@ -11,6 +11,10 @@ from sqlalchemy.orm.session import Session
 from user import Base, User
 
 
+valid_args = ['id', 'email', 'hashed_password',
+                      'session_id', 'reset_token']
+
+
 class DB:
     """DB class
     """
@@ -48,11 +52,20 @@ class DB:
         """
         Find a user in the database
         """
-        valid_args = ['id', 'email', 'hashed_password',
-                      'session_id', 'reset_token']
         if not kwagrs or any(arg not in valid_args for arg in kwagrs):
             raise InvalidRequestError()
         try:
             return self._session.query(User).filter_by(**kwagrs).one()
         except Exception:
             raise NoResultFound()
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        Update the user
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError()
