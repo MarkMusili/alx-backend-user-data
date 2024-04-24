@@ -36,8 +36,6 @@ def users():
 def login() -> str:
     """
     Login route
-    Recieves a form and validate a user
-    return the response with a set cookie
     """
     email = request.form.get('email')
     password = request.form.get('password')
@@ -50,4 +48,7 @@ def login() -> str:
 
 
 if __name__ == "__main__":
+    """
+    Flask configuration and entry point
+    """
     app.run(host="0.0.0.0", port="5000", debug=True)
