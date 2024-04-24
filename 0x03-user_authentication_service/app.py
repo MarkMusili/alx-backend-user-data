@@ -2,23 +2,23 @@
 """
 Flask application
 """
+from flask import Flask, jsonify, request, abort, make_response
 from auth import Auth
-from flask import Flask, jsonify, request, abort
 
 
 app = Flask(__name__)
 auth = Auth()
 
 
-@app.route('/')
+@app.route('/', strict_slashes=False)
 def root():
     """
     Root path
     """
-    return jsonify({"message": "Bienvenue"})
+    return jsonify({"message": "Bienvenue"}), 200
 
 
-@app.route('/users', methods=['POST'], s)
+@app.route('/users', methods=['POST'], strict_slashes=False)
 def users():
     """
     Endpoint for users
@@ -27,26 +27,24 @@ def users():
     password = request.form.get('password')
     try:
         user = auth.register_user(email, password)
-        return jsonify({"email": user.email, "message": "user created"})
+        return jsonify({"email": user.email, "message": "user created"}), 200
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
 
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login() -> str:
-    """ POST /sessions
-      Return:
-        - message
+    """
+    Login route
     """
     email = request.form.get('email')
     password = request.form.get('password')
-    if auth.valid_login(email, password):
-        session_id = auth.create_session(email)
-        response = jsonify({"email": email, "message": "logged in"})
-        response.set_cookie("session_id", session_id)
-        return response
-    else:
+    if not auth.valid_login(email, password):
         abort(401)
+    session_id = auth.create_session(email)
+    response = jsonify({"email": email, "message": "logged in"})
+    response.set_cookie("session_id", session_id)
+    return response
 
 
 if __name__ == "__main__":
