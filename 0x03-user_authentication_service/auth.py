@@ -5,6 +5,7 @@ Authentication system
 import bcrypt
 from db import DB
 from user import User
+from uuid import uuid4
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -14,6 +15,13 @@ def _hash_password(password: str) -> bytes:
     """
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password.encode("utf-8"), salt)
+
+
+def _generate_uuid() -> str:
+    """
+    Generate a uuid
+    """
+    return str(uuid4())
 
 
 class Auth:
