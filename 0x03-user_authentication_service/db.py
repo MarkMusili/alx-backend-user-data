@@ -11,10 +11,6 @@ from sqlalchemy.orm.session import Session
 from user import Base, User
 
 
-valid_args = ['id', 'email', 'hashed_password',
-                      'session_id', 'reset_token']
-
-
 class DB:
     """DB class
     """
@@ -52,6 +48,8 @@ class DB:
         """
         Find a user in the database
         """
+        valid_args = ['id', 'email', 'hashed_password',
+                            'session_id', 'reset_token']
         if not kwagrs or any(arg not in valid_args for arg in kwagrs):
             raise InvalidRequestError()
         try:
