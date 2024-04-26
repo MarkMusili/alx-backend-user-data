@@ -89,12 +89,12 @@ class Auth:
         """
         Get password token
         """
-        user = self._db.find_user_by(email=email)
-        if not user:
+        try:
+            user = self._db.find_user_by(email=email)
+        except NoResultFound:
             raise ValueError()
-        else:
-            token = _generate_uuid()
-            self._db.update_user(user.id, reset_token=token)
+        token = _generate_uuid()
+        self._db.update_user(user.id, reset_token=token)
         return token
 
     def update_password(self, reset_token: str, password: str) -> None:
